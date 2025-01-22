@@ -1,4 +1,4 @@
-const IP="10.0.2.135"
+const IP="10.0.22.134"
 const PORT="3003"
 const URL="http://"+IP+":"+PORT+"/"
  export const getAllLaptops=(fnRefreshList)=>{
@@ -17,7 +17,7 @@ const URL="http://"+IP+":"+PORT+"/"
   )
 }
 
-export const saveLaptopRest=(laptop)=>{
+export const saveLaptopRest=(laptop,fnShowMessage)=>{
   const config={
     method:"POST",
     headers:{
@@ -38,6 +38,35 @@ export const saveLaptopRest=(laptop)=>{
     }
   ).then(
     (body)=>{
+      fnShowMessage();
+      console.log(body);
+    }
+  )
+}
+
+export const upDateLaptopRest=(laptop,fnShowMessage)=>{
+  const config={
+    method:"PUT",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      id:laptop.id,
+      marca:laptop.marca,
+      precesador:laptop.procesador,
+      memoria:laptop.memoria,
+      disco:laptop.disco
+    })
+  }
+  fetch(
+    URL+"laptops/"+laptop.id,config
+  ).then(
+    (response)=>{
+      return response.json();
+    }
+  ).then(
+    (body)=>{
+      fnShowMessage();
       console.log(body);
     }
   )

@@ -1,29 +1,48 @@
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { Button, Input, Icon } from "@rneui/base"
 import { useState } from 'react'
-import {saveLaptopRest} from "../rest_laptops/Laptops"
+import { saveLaptopRest, upDateLaptopRest } from "../rest_laptops/Laptops"
 
-export const LaptopsForm = ({navigation}) => {
-  const [marca, setMarca] = useState();
-  const [procesador, setProcesador] = useState();
-  const [memoria, setMemoria] = useState();
-  const [disco, setDisco] = useState();
-  const saveLaptop=()=>{
+export const LaptopsForm = ({ navigation, route }) => {
+  let laptopRetriever = route.params.laptopParam;
+  let isNew = true;
 
+  if (laptopRetriever != null) {
+    isNew = false;
+  }
+
+  const [marca, setMarca] = useState(isNew ? null : laptopRetriever.marca);
+  const [procesador, setProcesador] = useState(isNew ? null : laptopRetriever.procesador);
+  const [memoria, setMemoria] = useState(isNew ? null : laptopRetriever.memoria);
+  const [disco, setDisco] = useState(isNew ? null : laptopRetriever.disco);
+
+  const createLaptop = () => {
     console.log("validar guardar")
-    navigation.goBack();
     saveLaptopRest(
       {
-        marca:marca,
-        procesador:procesador,
-        memoria:memoria,
-        disco:disco
+        marca: marca,
+        procesador: procesador,
+        memoria: memoria,
+        disco: disco
       },
       showMessage()
     )
   }
-  const showMessage=()=>{
-    Alert.alert("INFORMACION","Laptop creado con exito")
+
+  const upDateLaptops = () => {
+    console.log("ACTUALICACION")
+    upDateLaptopRest({
+      id:laptopRetriever.id,
+      marca: marca,
+      procesador: procesador,
+      memoria: memoria,
+      disco: disco
+    },showMessage());
+
+  }
+  const showMessage = () => {
+    Alert.alert("INFORMACION", isNew ? "Laptop creado con exito" : "Laptop actualizada")
+    navigation.goBack();
   }
 
   return <View style={styles.container}>
@@ -55,7 +74,7 @@ export const LaptopsForm = ({navigation}) => {
         setDisco(value)
       }}
     />
-    <Button radius={"sm"} type="solid" onPress={saveLaptop}>
+    <Button radius={"sm"} type="solid" onPress={isNew ? createLaptop : upDateLaptops}>
       GUARDAR
       <Icon name="save" color="white" />
     </Button>
