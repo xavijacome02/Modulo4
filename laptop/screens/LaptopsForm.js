@@ -10,6 +10,9 @@ export const LaptopsForm = ({ navigation, route }) => {
   if (laptopRetriever != null) {
     isNew = false;
   }
+  console.log(isNew, laptopRetriever)
+  
+
 
   const [marca, setMarca] = useState(isNew ? null : laptopRetriever.marca);
   const [procesador, setProcesador] = useState(isNew ? null : laptopRetriever.procesador);
@@ -25,25 +28,28 @@ export const LaptopsForm = ({ navigation, route }) => {
         memoria: memoria,
         disco: disco
       },
-      showMessage()
+      showMessage
     )
   }
 
   const upDateLaptops = () => {
-    console.log("ACTUALICACION")
+    console.log("Se actualiza laptop")
     upDateLaptopRest({
       id:laptopRetriever.id,
       marca: marca,
       procesador: procesador,
       memoria: memoria,
       disco: disco
-    },showMessage());
-
+    },showMessage);
   }
+
+
   const showMessage = () => {
     Alert.alert("INFORMACION", isNew ? "Laptop creado con exito" : "Laptop actualizada")
     navigation.goBack();
   }
+
+
 
   return <View style={styles.container}>
     <Input
