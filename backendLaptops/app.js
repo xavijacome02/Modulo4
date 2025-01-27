@@ -8,7 +8,7 @@ const puerto=3003;
 app.delete("/laptops/:idParam",(request,response)=>{
   const id=request.params.idParam;
   console.log(id);
-  response.send( )
+  response.send({id:id})
 })
 app.use(express.json());
 
