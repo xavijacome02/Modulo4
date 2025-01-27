@@ -1,4 +1,4 @@
-const IP="10.0.22.134"
+const IP="10.0.56.47"
 const PORT="3003"
 const URL="http://"+IP+":"+PORT+"/"
  export const getAllLaptops=(fnRefreshList)=>{
@@ -34,7 +34,7 @@ export const saveLaptopRest=(laptop,fnShowMessage)=>{
     URL+"laptops/",config
   ).then(response => response.json())
   .then(body => {
-    fnShowMessage();
+    fnShowMessage("Se ha creado laptop");
     console.log(body);
   })
 }
@@ -57,7 +57,7 @@ export const upDateLaptopRest = (laptop, fnShowMessage) => {
   fetch(URL + "laptops/" + laptop.id, config)
     .then(response => response.json())
     .then(body => {
-      fnShowMessage();
+      fnShowMessage;
       console.log(body);
     })
     .catch(error => {
@@ -65,4 +65,21 @@ export const upDateLaptopRest = (laptop, fnShowMessage) => {
     });
 };
 
+
+export const deleteLaptoptRest=(laptop,fnShowMessage)=>{
+  const config={
+    method:"DELETE",
+  }
+  fetch(URL + "laptops/" + laptop.id, config)
+  .then(
+    (response)=>{
+      return response.json();
+    }
+  ).then(
+    (body)=>{
+      fnShowMessage("Se ha eliminado la laptop");
+      console.log(body);
+    }
+  )
+}
 

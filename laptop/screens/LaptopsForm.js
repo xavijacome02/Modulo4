@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { Button, Input, Icon } from "@rneui/base"
 import { useState } from 'react'
-import { saveLaptopRest, upDateLaptopRest } from "../rest_laptops/Laptops"
+import { saveLaptopRest, upDateLaptopRest, deleteLaptoptRest } from "../rest_laptops/Laptops"
 
 export const LaptopsForm = ({ navigation, route }) => {
   let laptopRetriever = route.params.laptopParam;
@@ -11,7 +11,7 @@ export const LaptopsForm = ({ navigation, route }) => {
     isNew = false;
   }
   console.log(isNew, laptopRetriever)
-  
+
 
 
   const [marca, setMarca] = useState(isNew ? null : laptopRetriever.marca);
@@ -32,20 +32,40 @@ export const LaptopsForm = ({ navigation, route }) => {
     )
   }
 
+  const deleteLaptop = () => {
+    console.log("eliminar laptop")
+    deleteLaptoptRest({
+      id: laptopRetriever.id
+    }, showMessage)
+  }
+  const confirmDelete = () => {
+    Alert.alert("ALERTA",
+      "Estas seguro que deseas eliminar?",
+      [
+        {
+          text: "Si",
+          onPress: deleteLaptop
+        },
+        {
+          text: "No",
+        }
+      ]
+    )
+  }
   const upDateLaptops = () => {
     console.log("Se actualiza laptop")
     upDateLaptopRest({
-      id:laptopRetriever.id,
+      id: laptopRetriever.id,
       marca: marca,
       procesador: procesador,
       memoria: memoria,
       disco: disco
-    },showMessage);
+    }, showMessage("Se actualizo con exito"));
   }
 
 
-  const showMessage = () => {
-    Alert.alert("INFORMACION", isNew ? "Laptop creado con exito" : "Laptop actualizada")
+  const showMessage = (message) => {
+    Alert.alert("INFORMACION", message)
     navigation.goBack();
   }
 
@@ -84,6 +104,15 @@ export const LaptopsForm = ({ navigation, route }) => {
       GUARDAR
       <Icon name="save" color="white" />
     </Button>
+    {
+      isNew ? <View></View> : <Button radius={"sm"} type="solid" onPress={confirmDelete}>
+        ELIMINAR
+        <Icon name="delete" color="white" />
+      </Button>
+
+    }
+
+
   </View>
 }
 const styles = StyleSheet.create({
